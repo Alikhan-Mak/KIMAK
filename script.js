@@ -75,7 +75,7 @@ const App = (() => {
     tourism: {
       label:'VISITOR DENSITY %', unit:'%', color:'#f97316', warn:60, crit:80,
       districts:{ 'Алатауский':{v:12,t:2}, 'Турксибский':{v:28,t:5}, 'Ауэзовский':{v:35,t:8}, 'Алмалинский':{v:78,t:12}, 'Жетысуский':{v:45,t:6}, 'Наурызбайский':{v:18,t:3}, 'Бостандыкский':{v:55,t:10}, 'Медеуский':{v:88,t:18} },
-      kpis:[{l:'Total Visitors',v:'84,200',u:'today',t:'+12,400',d:'up'},{l:'Shymbulak Load',v:'95%',u:'capacity',t:'+18%',d:'up'},{l:'Avg Sentiment',v:'4.1/5',u:'',t:'-0.2',d:'up'},{l:'Economic Impact',v:'₸2.4B',u:'est today',t:'+8%',d:'down'}],
+      kpis:[{l:'Total Visitors',v:'84,200',u:'today',t:'+12,400',d:'up'},{l:'Visitors Today',v:'84,200',u:'today',t:'+12,400',d:'up'},{l:'Avg Sentiment',v:'4.1/5',u:'',t:'-0.2',d:'up'},{l:'Economic Impact',v:'₸2.4B',u:'est today',t:'+8%',d:'down'}],
       alerts:[{p:'P3',t:'07:00',l:'Медеуский',m:'Shymbulak 95% capacity — 2.1km queue. Safety threshold breach imminent.'},{p:'P3',t:'06:45',l:'Алмалинский',m:'Panfilov Park 78% — exceeded 90% three times in past hour.'},{p:'P5',t:'06:30',l:'Медеуский',m:'340 vehicles in unauthorized parking zones on Medeu approach.'},{p:'P6',t:'05:00',l:'Бостандыкский',m:'Kok-Tobe cable car wait 65 min. Negative reviews spiking.'}],
       sum:'Медеуский critical: Shymbulak at 95% capacity (9,500/10,000). Queue 2.1km. Kok-Tobe (Бостандыкский) at 45% — ideal redirection target, similar mountain appeal. Est. revenue uplift if redirected: +12%.',
       crit:'P3 🟡 — Overcrowding creates safety hazard. Evacuation route capacity exceeded.',
