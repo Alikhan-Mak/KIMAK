@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Smart City — Management Dashboard Docs</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            bg:      '#0a0f1a',
+            surface: '#0f172a',
+            border:  '#1e293b',
+            text:    '#e2e8f0',
+            accent:  '#38bdf8',
+          },
+          fontFamily: {
+            mono: ['JetBrains Mono', 'Fira Code', 'monospace'],
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+          },
+        },
+      },
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    html { scroll-behavior: smooth; }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #0a0f1a; }
+    ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #38bdf8; }
+
+    .sidebar-link { transition: all 0.15s ease; }
+    .sidebar-link:hover { color: #38bdf8; padding-left: 1.25rem; }
+    .sidebar-link.active { color: #38bdf8; border-left: 2px solid #38bdf8; padding-left: 1.125rem; }
+
+    .section-card { background: #0f172a; border: 1px solid #1e293b; border-radius: 0.75rem; }
+    .section-card:hover { border-color: #334155; }
+
+    .gradient-bar {
+      background: linear-gradient(to right, #22c55e, #eab308, #ef4444);
+      height: 6px;
+      border-radius: 3px;
+    }
+
+    blockquote {
+      border-left: 3px solid #38bdf8;
+      background: #0a1628;
+      padding: 0.75rem 1rem;
+      border-radius: 0 0.375rem 0.375rem 0;
+      font-style: italic;
+    }
+
+    .badge-p1 { background: #7f1d1d; color: #fca5a5; border: 1px solid #ef4444; }
+    .badge-p2 { background: #7c2d12; color: #fdba74; border: 1px solid #f97316; }
+    .badge-p3 { background: #713f12; color: #fde047; border: 1px solid #eab308; }
+    .badge-p4 { background: #14532d; color: #86efac; border: 1px solid #22c55e; }
+    .badge-p5 { background: #1e3a5f; color: #93c5fd; border: 1px solid #3b82f6; }
+    .badge-p6 { background: #1e293b; color: #cbd5e1; border: 1px solid #64748b; }
+
+    table { border-collapse: collapse; width: 100%; }
+    th { background: #0a0f1a; color: #38bdf8; font-weight: 600; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; }
+    tr:hover td { background: #0a1628; }
+    td, th { border: 1px solid #1e293b; padding: 0.625rem 0.875rem; }
+  </style>
+</head>
+<body class="bg-bg text-text font-sans antialiased">
+
+  <!-- Top bar -->
+  <header class="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-3 border-b border-border bg-surface/90 backdrop-blur-sm">
+    <div class="flex items-center gap-3">
+      <div class="w-7 h-7 rounded-md bg-accent/20 flex items-center justify-center">
+        <svg class="w-4 h-4 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+        </svg>
+      </div>
+      <span class="font-semibold text-sm tracking-wide">Smart City</span>
+      <span class="text-border font-light text-sm">/</span>
+      <span class="text-slate-400 text-sm">Management Dashboard</span>
+    </div>
+    <div class="flex items-center gap-2">
+      <span class="text-xs px-2 py-1 rounded bg-accent/10 text-accent font-mono border border-accent/20">MVP · Almaty, KZ</span>
+    </div>
+  </header>
+
+  <div class="flex pt-14">
+
+    <!-- Sidebar -->
+    <aside class="fixed top-14 left-0 bottom-0 w-60 overflow-y-auto border-r border-border bg-surface/60 px-4 py-6 hidden lg:block">
+      <nav class="space-y-1 text-sm text-slate-400">
+        <p class="text-xs font-semibold uppercase tracking-widest text-slate-500 mb-3">Overview</p>
+        <a href="#context" class="sidebar-link block py-1.5 px-3 rounded">Project Context</a>
+        <a href="#architecture" class="sidebar-link block py-1.5 px-3 rounded">Architecture</a>
+        <a href="#data" class="sidebar-link block py-1.5 px-3 rounded">Data</a>
+
+        <p class="text-xs font-semibold uppercase tracking-widest text-slate-500 mt-5 mb-3">AI</p>
+        <a href="#priority" class="sidebar-link block py-1.5 px-3 rounded">Priority Model</a>
+        <a href="#ai-response" class="sidebar-link block py-1.5 px-3 rounded">Response Requirements</a>
+        <a href="#chat" class="sidebar-link block py-1.5 px-3 rounded">Conversational Chat</a>
+
+        <p class="text-xs font-semibold uppercase tracking-widest text-slate-500 mt-5 mb-3">Features</p>
+        <a href="#digest" class="sidebar-link block py-1.5 px-3 rounded">Daily Digest</a>
+        <a href="#history" class="sidebar-link block py-1.5 px-3 rounded">Anomaly History</a>
+        <a href="#forecast" class="sidebar-link block py-1.5 px-3 rounded">Forecast Widget</a>
+        <a href="#export" class="sidebar-link block py-1.5 px-3 rounded">Export / PDF</a>
+
+        <p class="text-xs font-semibold uppercase tracking-widest text-slate-500 mt-5 mb-3">Integrations</p>
+        <a href="#telegram" class="sidebar-link block py-1.5 px-3 rounded">Telegram</a>
+
+        <p class="text-xs font-semibold uppercase tracking-widest text-slate-500 mt-5 mb-3">Domain 5</p>
+        <a href="#tourism" class="sidebar-link block py-1.5 px-3 rounded">Tourism Monitor</a>
+
+        <p class="text-xs font-semibold uppercase tracking-widest text-slate-500 mt-5 mb-3">Standards</p>
+        <a href="#design" class="sidebar-link block py-1.5 px-3 rounded">Design System</a>
+        <a href="#nfr" class="sidebar-link block py-1.5 px-3 rounded">Non-Functional Req.</a>
+      </nav>
+    </aside>
+
+    <!-- Main content -->
+    <main class="lg:ml-60 flex-1 max-w-4xl mx-auto px-6 lg:px-10 py-10 space-y-12">
+
+      <!-- Hero -->
+      <div>
+        <div class="gradient-bar mb-6 w-24"></div>
+        <h1 class="text-3xl font-bold text-text mb-2">Smart City Management Dashboard</h1>
+        <p class="text-slate-400">Project documentation — Almaty, Kazakhstan</p>
+        <div class="flex flex-wrap gap-2 mt-4">
+          <span class="text-xs px-2.5 py-1 rounded-full bg-sky-500/10 text-sky-400 border border-sky-500/20">Energy</span>
+          <span class="text-xs px-2.5 py-1 rounded-full bg-yellow-500/10 text-yellow-400 border border-yellow-500/20">Utilities (ЖКХ)</span>
+          <span class="text-xs px-2.5 py-1 rounded-full bg-purple-500/10 text-purple-400 border border-purple-500/20">Transport</span>
+          <span class="text-xs px-2.5 py-1 rounded-full bg-green-500/10 text-green-400 border border-green-500/20">Urban Environment</span>
+          <span class="text-xs px-2.5 py-1 rounded-full bg-orange-500/10 text-orange-400 border border-orange-500/20">Tourism</span>
+        </div>
+      </div>
+
+      <!-- Project Context -->
+      <section id="context" class="section-card p-6 transition-colors">
+        <h2 class="text-lg font-semibold text-accent mb-3 flex items-center gap-2">
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          Project Context
+        </h2>
+        <p class="text-slate-300 leading-relaxed">This is an <strong class="text-text">MVP prototype</strong> for a Smart City Management Dashboard focused on Almaty, Kazakhstan. Before implementing any feature, re-read the hackathon requirements document to ensure full compliance. <span class="text-accent font-medium">Prioritize completeness over speed.</span></p>
+      </section>
+
+      <!-- Architecture -->
+      <section id="architecture">
+        <h2 class="text-xl font-bold text-text mb-5 flex items-center gap-2">
+          <span class="w-1 h-6 bg-accent rounded-full inline-block"></span>
+          Architecture
+        </h2>
+
+        <div class="space-y-4">
+          <!-- Map -->
+          <div class="section-card p-6 transition-colors">
+            <h3 class="font-semibold text-text mb-3">Main Page — Interactive Map</h3>
+            <ul class="space-y-2 text-slate-300 text-sm">
+              <li class="flex gap-2"><span class="text-accent mt-0.5">▸</span>Display a detailed map of Almaty using a real tile-based provider (OpenStreetMap via Leaflet, or Mapbox) showing roads, buildings, and streets.</li>
+              <li class="flex gap-2"><span class="text-accent mt-0.5">▸</span>Include <strong class="text-text">ALL</strong> administrative districts of Almaty as overlay polygons.</li>
+              <li class="flex gap-2"><span class="text-accent mt-0.5">▸</span>Support switchable data layers (one per domain).</li>
+              <li class="flex gap-2"><span class="text-accent mt-0.5">▸</span>Use a continuous <span class="text-green-400">green</span> → <span class="text-yellow-400">yellow</span> → <span class="text-red-400">red</span> gradient to represent load or severity. Thresholds are metric-specific, not always 0–100%.</li>
+              <li class="flex gap-2"><span class="text-accent mt-0.5">▸</span>Clicking a district opens a detail panel with metrics and AI analysis.</li>
+            </ul>
+            <div class="gradient-bar mt-4 w-full opacity-60"></div>
+          </div>
+
+          <!-- Navigation -->
+          <div class="section-card p-6 transition-colors">
+            <h3 class="font-semibold text-text mb-3">Navigation</h3>
+            <p class="text-slate-300 text-sm mb-3">Top navigation bar with links to five domain dashboards. The currently active page must be visually highlighted.</p>
+            <div class="flex flex-wrap gap-2">
+              <span class="px-3 py-1.5 bg-accent/10 border border-accent/30 text-accent text-sm rounded font-medium">Energy</span>
+              <span class="px-3 py-1.5 bg-border text-slate-300 text-sm rounded">Utilities</span>
+              <span class="px-3 py-1.5 bg-border text-slate-300 text-sm rounded">Transport</span>
+              <span class="px-3 py-1.5 bg-border text-slate-300 text-sm rounded">Urban Environment</span>
+              <span class="px-3 py-1.5 bg-border text-slate-300 text-sm rounded">Tourism</span>
+            </div>
+          </div>
+
+          <!-- Domain dashboards -->
+          <div class="section-card p-6 transition-colors">
+            <h3 class="font-semibold text-text mb-3">Domain Dashboards</h3>
+            <p class="text-slate-400 text-sm mb-4">Each dashboard (one per category) must include:</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div class="flex items-start gap-3 bg-bg/60 rounded-lg p-3 border border-border">
+                <div class="w-8 h-8 rounded bg-sky-500/10 flex items-center justify-center flex-shrink-0">
+                  <svg class="w-4 h-4 text-sky-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+                </div>
+                <div><p class="text-sm font-medium text-text">KPI Cards</p><p class="text-xs text-slate-400">Current values + trend indicators</p></div>
+              </div>
+              <div class="flex items-start gap-3 bg-bg/60 rounded-lg p-3 border border-border">
+                <div class="w-8 h-8 rounded bg-purple-500/10 flex items-center justify-center flex-shrink-0">
+                  <svg class="w-4 h-4 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"/></svg>
+                </div>
+                <div><p class="text-sm font-medium text-text">Time-Series Chart</p><p class="text-xs text-slate-400">Last 24 hours or 7 days</p></div>
+              </div>
+              <div class="flex items-start gap-3 bg-bg/60 rounded-lg p-3 border border-border">
+                <div class="w-8 h-8 rounded bg-red-500/10 flex items-center justify-center flex-shrink-0">
+                  <svg class="w-4 h-4 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                </div>
+                <div><p class="text-sm font-medium text-text">Anomaly & Alert List</p><p class="text-xs text-slate-400">Severity badges P1–P6</p></div>
+              </div>
+              <div class="flex items-start gap-3 bg-bg/60 rounded-lg p-3 border border-border">
+                <div class="w-8 h-8 rounded bg-green-500/10 flex items-center justify-center flex-shrink-0">
+                  <svg class="w-4 h-4 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17H3a2 2 0 01-2-2V5a2 2 0 012-2h14a2 2 0 012 2v10a2 2 0 01-2 2h-2"/></svg>
+                </div>
+                <div><p class="text-sm font-medium text-text">AI Analysis Panel</p><p class="text-xs text-slate-400">Per domain insights</p></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Data -->
+      <section id="data" class="section-card p-6 transition-colors">
+        <h2 class="text-lg font-semibold text-accent mb-4 flex items-center gap-2">
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582 4 8 4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"/></svg>
+          Data
+        </h2>
+        <ul class="space-y-2 text-slate-300 text-sm">
+          <li class="flex gap-2"><span class="text-green-400">✓</span>Mock data is acceptable for the MVP.</li>
+          <li class="flex gap-2"><span class="text-yellow-400">!</span>Data must be <strong class="text-text">realistic and district-specific</strong> — values must not be uniform across all districts.</li>
+          <li class="flex gap-2"><span class="text-accent">▸</span>Each domain must expose at least <strong class="text-text">3–5 distinct metrics</strong>.</li>
+          <li class="flex gap-2"><span class="text-red-400">⚑</span>Every run must simulate at least one <span class="badge-p1 text-xs px-1.5 py-0.5 rounded font-mono">P1</span> critical and one <span class="badge-p3 text-xs px-1.5 py-0.5 rounded font-mono">P3</span> medium incident.</li>
+        </ul>
+      </section>
+
+      <!-- AI Priority -->
+      <section id="priority">
+        <h2 class="text-xl font-bold text-text mb-5 flex items-center gap-2">
+          <span class="w-1 h-6 bg-accent rounded-full inline-block"></span>
+          AI Functionality
+        </h2>
+
+        <div id="priority" class="section-card p-6 transition-colors mb-4">
+          <h3 class="font-semibold text-text mb-4">Incident Priority Model</h3>
+          <p class="text-slate-400 text-sm mb-4">Rank every incident using the following criteria, ordered from most to least important:</p>
+          <div class="overflow-x-auto rounded-lg">
+            <table>
+              <thead>
+                <tr>
+                  <th class="text-left">Level</th>
+                  <th class="text-left">Criterion</th>
+                  <th class="text-left">Examples</th>
+                </tr>
+              </thead>
+              <tbody class="text-sm text-slate-300">
+                <tr>
+                  <td><span class="badge-p1 px-2 py-0.5 rounded text-xs font-mono font-semibold">P1 🔴</span></td>
+                  <td>Potential human casualties</td>
+                  <td class="text-slate-400">Gas leak, building collapse, fire</td>
+                </tr>
+                <tr>
+                  <td><span class="badge-p2 px-2 py-0.5 rounded text-xs font-mono font-semibold">P2 🟠</span></td>
+                  <td>Significant financial loss</td>
+                  <td class="text-slate-400">Substation failure, pipeline rupture</td>
+                </tr>
+                <tr>
+                  <td><span class="badge-p3 px-2 py-0.5 rounded text-xs font-mono font-semibold">P3 🟡</span></td>
+                  <td>Mass disruption of essential services</td>
+                  <td class="text-slate-400">District-wide water or heat outage</td>
+                </tr>
+                <tr>
+                  <td><span class="badge-p4 px-2 py-0.5 rounded text-xs font-mono font-semibold">P4 🟢</span></td>
+                  <td>Environmental damage</td>
+                  <td class="text-slate-400">Chemical spill, air quality breach</td>
+                </tr>
+                <tr>
+                  <td><span class="badge-p5 px-2 py-0.5 rounded text-xs font-mono font-semibold">P5 🔵</span></td>
+                  <td>Transport disruption</td>
+                  <td class="text-slate-400">Road closure, transit system failure</td>
+                </tr>
+                <tr>
+                  <td><span class="badge-p6 px-2 py-0.5 rounded text-xs font-mono font-semibold">P6 ⚪</span></td>
+                  <td>Public discomfort</td>
+                  <td class="text-slate-400">Low water pressure, street lighting fault</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- AI Response -->
+        <div id="ai-response" class="section-card p-6 transition-colors mb-4">
+          <h3 class="font-semibold text-text mb-4">AI Response Requirements</h3>
+          <p class="text-slate-400 text-sm mb-4">For every selected district or incident the AI must answer three questions:</p>
+          <div class="space-y-3">
+            <div class="flex gap-4 p-4 bg-bg/60 rounded-lg border border-border">
+              <div class="w-7 h-7 rounded-full bg-accent/20 text-accent text-sm font-bold flex items-center justify-center flex-shrink-0">1</div>
+              <div><p class="font-medium text-text text-sm">What is happening?</p><p class="text-slate-400 text-sm">A factual summary of the current situation.</p></div>
+            </div>
+            <div class="flex gap-4 p-4 bg-bg/60 rounded-lg border border-border">
+              <div class="w-7 h-7 rounded-full bg-accent/20 text-accent text-sm font-bold flex items-center justify-center flex-shrink-0">2</div>
+              <div><p class="font-medium text-text text-sm">How critical is it?</p><p class="text-slate-400 text-sm">The priority level (P1–P6) with a clear justification.</p></div>
+            </div>
+            <div class="flex gap-4 p-4 bg-bg/60 rounded-lg border border-border">
+              <div class="w-7 h-7 rounded-full bg-accent/20 text-accent text-sm font-bold flex items-center justify-center flex-shrink-0">3</div>
+              <div>
+                <p class="font-medium text-text text-sm">What actions should be taken?</p>
+                <p class="text-slate-400 text-sm mb-2">Specific, actionable steps with responsible parties and estimated response times. Vague advice is not acceptable.</p>
+                <blockquote class="text-slate-300 text-sm not-italic">
+                  "Dispatch an emergency crew to substation #4 on Abay Ave within 30 minutes. Notify the 2,300 affected residents via SMS. Switch load to backup line B-12."
+                </blockquote>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Conversational chat -->
+        <div id="chat" class="section-card p-6 transition-colors">
+          <h3 class="font-semibold text-text mb-2">Conversational Follow-up</h3>
+          <p class="text-slate-300 text-sm">After the initial AI summary, display a chat input field so the user can ask follow-up questions about the same incident or district. <strong class="text-text">Full conversation context must be preserved across turns.</strong></p>
+        </div>
+      </section>
+
+      <!-- Additional Features -->
+      <section>
+        <h2 class="text-xl font-bold text-text mb-5 flex items-center gap-2">
+          <span class="w-1 h-6 bg-accent rounded-full inline-block"></span>
+          Additional Features
+        </h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+          <div id="digest" class="section-card p-5 transition-colors">
+            <div class="flex items-center gap-2 mb-2">
+              <svg class="w-4 h-4 text-yellow-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/></svg>
+              <h3 class="font-semibold text-text text-sm">Daily Digest Panel</h3>
+            </div>
+            <ul class="text-slate-400 text-xs space-y-1">
+              <li>▸ Collapsible banner at top of main page</li>
+              <li>▸ Auto-generated by AI on page load</li>
+              <li>▸ Summarizes top 3 city-wide issues</li>
+            </ul>
+          </div>
+
+          <div id="history" class="section-card p-5 transition-colors">
+            <div class="flex items-center gap-2 mb-2">
+              <svg class="w-4 h-4 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              <h3 class="font-semibold text-text text-sm">Anomaly History Log</h3>
+            </div>
+            <ul class="text-slate-400 text-xs space-y-1">
+              <li>▸ Scrollable timeline per district</li>
+              <li>▸ Indicates new vs. recurring problems</li>
+              <li>▸ Satisfies anomaly detection requirement</li>
+            </ul>
+          </div>
+
+          <div id="forecast" class="section-card p-5 transition-colors">
+            <div class="flex items-center gap-2 mb-2">
+              <svg class="w-4 h-4 text-sky-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+              <h3 class="font-semibold text-text text-sm">Forecast Widget</h3>
+            </div>
+            <ul class="text-slate-400 text-xs space-y-1">
+              <li>▸ 6-hour predicted load chart</li>
+              <li>▸ Available on each domain dashboard</li>
+              <li>▸ Satisfies прогнозирование requirement</li>
+            </ul>
+          </div>
+
+          <div id="export" class="section-card p-5 transition-colors">
+            <div class="flex items-center gap-2 mb-2">
+              <svg class="w-4 h-4 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+              <h3 class="font-semibold text-text text-sm">Export / Report Button</h3>
+            </div>
+            <ul class="text-slate-400 text-xs space-y-1">
+              <li>▸ One-click "Generate PDF Report"</li>
+              <li>▸ Exports AI analysis + key metrics</li>
+              <li>▸ Strong demo moment for hackathon</li>
+            </ul>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Telegram -->
+      <section id="telegram">
+        <h2 class="text-xl font-bold text-text mb-5 flex items-center gap-2">
+          <span class="w-1 h-6 bg-accent rounded-full inline-block"></span>
+          Telegram Integration
+        </h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="section-card p-6 transition-colors">
+            <div class="flex items-center gap-2 mb-3">
+              <div class="w-8 h-8 rounded-lg bg-sky-500/10 flex items-center justify-center">
+                <svg class="w-4 h-4 text-sky-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.248l-1.97 9.287c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.833.934z"/></svg>
+              </div>
+              <h3 class="font-semibold text-text">Notification Channel</h3>
+            </div>
+            <p class="text-xs text-slate-500 uppercase tracking-wider mb-2">Dispatcher-facing</p>
+            <ul class="text-slate-300 text-sm space-y-1.5">
+              <li class="flex gap-2"><span class="text-accent">▸</span>Automated push for P1 &amp; P2 incidents in real time</li>
+              <li class="flex gap-2"><span class="text-accent">▸</span>Structured weekly district report every Monday morning</li>
+              <li class="flex gap-2"><span class="text-accent">▸</span>Fully automated, no manual intervention</li>
+            </ul>
+          </div>
+          <div class="section-card p-6 transition-colors">
+            <div class="flex items-center gap-2 mb-3">
+              <div class="w-8 h-8 rounded-lg bg-green-500/10 flex items-center justify-center">
+                <svg class="w-4 h-4 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+              </div>
+              <h3 class="font-semibold text-text">Complaint Bot</h3>
+            </div>git branch -M main
+            <p class="text-xs text-slate-500 uppercase tracking-wider mb-2">Citizen-facing</p>
+            <ul class="text-slate-300 text-sm space-y-1.5">
+              <li class="flex gap-2"><span class="text-accent">▸</span>Citizens submit complaints in free text</li>
+              <li class="flex gap-2"><span class="text-accent">▸</span>Auto-classified &amp; attached to correct district on map</li>
+              <li class="flex gap-2"><span class="text-accent">▸</span>Only P1–P5 surfaced to operators; duplicates filtered</li>
+              <li class="flex gap-2"><span class="text-accent">▸</span>Classification in real time</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Tourism -->
+      <section id="tourism">
+        <h2 class="text-xl font-bold text-text mb-1 flex items-center gap-2">
+          <span class="w-1 h-6 bg-orange-400 rounded-full inline-block"></span>
+          Domain 5 — Tourism Monitor
+        </h2>
+        <p class="text-slate-400 text-sm mb-5">Tracks visitor density, forecasts crowd load, and generates economic reallocation recommendations.</p>
+
+        <!-- Metrics table -->
+        <div class="section-card p-6 transition-colors mb-4">
+          <h3 class="font-semibold text-text mb-4">Metrics to Display</h3>
+          <div class="overflow-x-auto rounded-lg">
+            <table>
+              <thead>
+                <tr>
+                  <th class="text-left">Metric</th>
+                  <th class="text-left">Description</th>
+                </tr>
+              </thead>
+              <tbody class="text-sm text-slate-300">
+                <tr><td class="font-medium text-text">Visitor density by district</td><td class="text-slate-400">Current tourist load per district as a % of comfortable capacity</td></tr>
+                <tr><td class="font-medium text-text">Top attraction load</td><td class="text-slate-400">Real-time occupancy for Shymbulak, Kok-Tobe, Panfilov Park, Medeu, Green Bazaar, etc.</td></tr>
+                <tr><td class="font-medium text-text">3-day crowd forecast</td><td class="text-slate-400">Predicted visitor volume per attraction for the next 72 hours</td></tr>
+                <tr><td class="font-medium text-text">Redirection recommendations</td><td class="text-slate-400">AI-generated suggestions to move visitors from overloaded to underloaded sites</td></tr>
+                <tr><td class="font-medium text-text">Economic impact estimate</td><td class="text-slate-400">Projected revenue uplift for undervisited locations if redirection is applied</td></tr>
+                <tr><td class="font-medium text-text">Sentiment score</td><td class="text-slate-400">Aggregated tourist satisfaction from mock review data</td></tr>
+                <tr><td class="font-medium text-text">Average visit duration</td><td class="text-slate-400">Time spent per attraction — detects bottlenecks</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Redirection logic -->
+        <div class="section-card p-6 transition-colors mb-4">
+          <h3 class="font-semibold text-text mb-3">Redirection Recommendation Logic</h3>
+          <p class="text-slate-400 text-sm mb-3">When any attraction exceeds <strong class="text-red-400">80% capacity</strong>, the AI must:</p>
+          <ol class="space-y-2 text-slate-300 text-sm list-decimal list-inside">
+            <li>Identify alternative attractions with load below 50% and a similar visitor profile (nature, culture, food, etc.)</li>
+            <li>Display a recommendation card:</li>
+          </ol>
+          <blockquote class="mt-3 font-mono text-sm">
+            Shymbulak <span class="text-red-400 font-bold">95%</span> → redirect to Kok-Tobe <span class="text-green-400 font-bold">45%</span><br/>
+            Estimated revenue uplift for Kok-Tobe: <span class="text-accent">+12%</span>
+          </blockquote>
+          <p class="text-slate-400 text-sm mt-3">3. Suggest the optimal time window for the redirect (e.g., "afternoon visitors most likely to reroute").</p>
+        </div>
+
+        <!-- AI examples -->
+        <div class="section-card p-6 transition-colors mb-4">
+          <h3 class="font-semibold text-text mb-3">AI Recommendation Examples</h3>
+          <div class="space-y-3">
+            <blockquote class="text-slate-300 text-sm">"Deploy 2 additional shuttle buses from Almaty Arena to Medeu between 14:00–18:00 to absorb overflow from Shymbulak. Expected load reduction: 15%."</blockquote>
+            <blockquote class="text-slate-300 text-sm">"Promote the Botanical Garden via the city app push notification to users currently near Kok-Tobe. Current Botanical Garden load: 28%."</blockquote>
+            <blockquote class="text-slate-300 text-sm">"Flag Panfilov Park for crowd safety review — density has exceeded 90% for 3 consecutive hours."</blockquote>
+          </div>
+        </div>
+
+        <!-- Feature ideas -->
+        <div class="section-card p-6 transition-colors">
+          <h3 class="font-semibold text-text mb-4">Additional Tourism Feature Ideas</h3>
+          <div class="space-y-3 text-sm text-slate-300">
+            <div class="flex gap-3"><span class="text-orange-400 font-semibold w-32 flex-shrink-0">Seasonal overlay</span><span>Mark upcoming city events (concerts, marathons, festivals) on the map with projected crowd impact.</span></div>
+            <div class="flex gap-3"><span class="text-orange-400 font-semibold w-32 flex-shrink-0">Tourist heatmap</span><span>Animated 24-hour replay showing how tourist density shifts across the city throughout the day.</span></div>
+            <div class="flex gap-3"><span class="text-orange-400 font-semibold w-32 flex-shrink-0">Infra stress</span><span>Cross-reference tourist density with Utilities &amp; Transport data to flag when high visitor load strains local infrastructure.</span></div>
+            <div class="flex gap-3"><span class="text-orange-400 font-semibold w-32 flex-shrink-0">Hidden gem</span><span>Weekly AI-generated highlight of an undervisited attraction shown as a special pin on the main map.</span></div>
+            <div class="flex gap-3"><span class="text-orange-400 font-semibold w-32 flex-shrink-0">Revenue dash</span><span>Aggregate estimated tourist spending by district for city planners.</span></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Design System -->
+      <section id="design">
+        <h2 class="text-xl font-bold text-text mb-5 flex items-center gap-2">
+          <span class="w-1 h-6 bg-accent rounded-full inline-block"></span>
+          Design System
+        </h2>
+        <div class="section-card p-6 transition-colors">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div>
+              <h3 class="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-3">Color Palette</h3>
+              <div class="space-y-2">
+                <div class="flex items-center gap-3">
+                  <div class="w-8 h-8 rounded border border-border flex-shrink-0" style="background:#0a0f1a"></div>
+                  <div><p class="text-sm text-text">Background</p><p class="text-xs font-mono text-accent">#0a0f1a</p></div>
+                </div>
+                <div class="flex items-center gap-3">
+                  <div class="w-8 h-8 rounded border border-border flex-shrink-0" style="background:#0f172a"></div>
+                  <div><p class="text-sm text-text">Surface</p><p class="text-xs font-mono text-accent">#0f172a</p></div>
+                </div>
+                <div class="flex items-center gap-3">
+                  <div class="w-8 h-8 rounded border border-border flex-shrink-0" style="background:#1e293b"></div>
+                  <div><p class="text-sm text-text">Borders</p><p class="text-xs font-mono text-accent">#1e293b</p></div>
+                </div>
+                <div class="flex items-center gap-3">
+                  <div class="w-8 h-8 rounded border border-border flex-shrink-0" style="background:#e2e8f0"></div>
+                  <div><p class="text-sm text-text">Primary Text</p><p class="text-xs font-mono text-accent">#e2e8f0</p></div>
+                </div>
+                <div class="flex items-center gap-3">
+                  <div class="w-8 h-8 rounded border border-border flex-shrink-0" style="background:#38bdf8"></div>
+                  <div><p class="text-sm text-text">Accent</p><p class="text-xs font-mono text-accent">#38bdf8</p></div>
+                </div>
+              </div>
+            </div>
+            <div>
+              <h3 class="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-3">Severity Gradient</h3>
+              <div class="gradient-bar mb-3 w-full"></div>
+              <div class="flex justify-between text-xs font-mono">
+                <span class="text-green-400">Green (normal)</span>
+                <span class="text-yellow-400">Yellow (warn)</span>
+                <span class="text-red-400">Red (critical)</span>
+              </div>
+              <p class="text-slate-400 text-xs mt-3">Applied consistently across map, charts, and KPI cards. Thresholds are metric-specific.</p>
+
+              <h3 class="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-3 mt-5">Typography</h3>
+              <div class="space-y-1 text-sm">
+                <p class="font-mono text-text">Monospace <span class="text-slate-500">— data values</span></p>
+                <p class="text-text">Sans-serif <span class="text-slate-500">— labels &amp; body</span></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- NFR -->
+      <section id="nfr" class="section-card p-6 transition-colors">
+        <h2 class="text-lg font-semibold text-accent mb-4 flex items-center gap-2">
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+          Non-Functional Requirements
+        </h2>
+        <div class="space-y-3 text-sm text-slate-300">
+          <div class="flex gap-3 p-3 rounded-lg bg-bg/60 border border-border">
+            <span class="text-accent text-lg">⚡</span>
+            <div><p class="text-text font-medium">5-Second Rule</p><p class="text-slate-400">A city manager must understand overall city status within 5 seconds of opening the dashboard.</p></div>
+          </div>
+          <div class="flex gap-3 p-3 rounded-lg bg-bg/60 border border-border">
+            <span class="text-yellow-400 text-lg">⏳</span>
+            <div><p class="text-text font-medium">AI Loading State</p><p class="text-slate-400">All AI calls must display a loading state while processing.</p></div>
+          </div>
+          <div class="flex gap-3 p-3 rounded-lg bg-bg/60 border border-border">
+            <span class="text-green-400 text-lg">🛡</span>
+            <div><p class="text-text font-medium">Error Handling</p><p class="text-slate-400">All errors and empty states must be handled gracefully with informative fallback UI.</p></div>
+          </div>
+          <div class="flex gap-3 p-3 rounded-lg bg-bg/60 border border-border">
+            <span class="text-sky-400 text-lg">📱</span>
+            <div><p class="text-text font-medium">Responsive Layout</p><p class="text-slate-400">Mobile-responsive is a bonus but not required for MVP.</p></div>
+          </div>
+          <div class="flex gap-3 p-3 rounded-lg bg-bg/60 border border-border">
+            <span class="text-purple-400 text-lg">📡</span>
+            <div><p class="text-text font-medium">Telegram — Real-Time</p><p class="text-slate-400">All Telegram integrations must operate fully online and in real time.</p></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Footer -->
+      <footer class="border-t border-border pt-8 pb-4 text-center text-slate-600 text-xs">
+        Smart City Management Dashboard — Almaty, KZ · MVP Documentation · 2026
+      </footer>
+
+    </main>
+  </div>
+
+  <script>
+    // Active sidebar link highlighting on scroll
+    const sections = document.querySelectorAll('section[id], div[id]');
+    const links = document.querySelectorAll('.sidebar-link');
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          links.forEach(l => l.classList.remove('active'));
+          const active = document.querySelector(`.sidebar-link[href="#${entry.target.id}"]`);
+          if (active) active.classList.add('active');
+        }
+      });
+    }, { rootMargin: '-20% 0px -70% 0px' });
+
+    sections.forEach(s => observer.observe(s));
+  </script>
+</body>
+</html>
