@@ -639,7 +639,7 @@ const App = (() => {
             const tc=tColors[pn]||tColors[6];
             const dt=c.timestamp?new Date(c.timestamp).toLocaleString('en-GB',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}):'—';
             return `
-            <div class="complaint-row">
+            <div class="complaint-row" id="inc-row-${c.id}">
               <div class="complaint-left">
                 <div class="complaint-badge-wrap" style="background:${bg};color:${tc}">
                   ${c.priority||'P6'}
@@ -655,12 +655,19 @@ const App = (() => {
                 </div>
                 <div class="complaint-text">${c.text||c.summary||'—'}</div>
               </div>
+              <button onclick="App.deleteComplaint(${c.id})" style="margin-left:16px;padding:6px 14px;border:1px solid #d1d5db;border-radius:6px;background:#fff;color:#374151;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;flex-shrink:0">Done</button>
             </div>`; }).join('')}
         </div>
       </div>`;
   }
 
   function refreshComplaints(){ renderComplaints(); }
+
+  function deleteComplaint(id){
+    const row=document.getElementById('inc-row-'+id);
+    if(row) row.remove();
+    fetch('http://localhost:5000/api/incidents/'+id,{method:'DELETE'}).catch(()=>{});
+  }
 
   // ── CLOCK + INIT ─────────────────────────────────────────────────────────
   function init(){
@@ -671,5 +678,5 @@ const App = (() => {
   }
 
   window.addEventListener('load',init);
-  return {navigate,setLayer,closeDistrict,toggleDigest,sendChat,exportPDF,refreshComplaints,selectDomainDistrict};
+  return {navigate,setLayer,closeDistrict,toggleDigest,sendChat,exportPDF,refreshComplaints,selectDomainDistrict,deleteComplaint};
 })();

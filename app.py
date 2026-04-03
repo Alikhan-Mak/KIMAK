@@ -138,6 +138,15 @@ def get_incidents():
     return jsonify({"success": True, "incidents": incidents[-50:]})
 
 
+@app.route("/api/incidents/<int:incident_id>", methods=["DELETE"])
+def delete_incident(incident_id):
+    for i, inc in enumerate(incidents):
+        if inc.get("id") == incident_id:
+            incidents.pop(i)
+            return jsonify({"success": True})
+    return jsonify({"success": False, "error": "Not found"}), 404
+
+
 # ════════════════════════════════════════════════════════════
 # STATIC FILES
 # ════════════════════════════════════════════════════════════
