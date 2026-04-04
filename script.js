@@ -245,6 +245,57 @@ const App = (() => {
     return map[name]||{sit:`Район ${name} в пределах нормы. Незначительные отклонения, непосредственного риска нет.`,crit:'P6 ⚪ — Низкая серьёзность. Рекомендуется профилактический мониторинг.',act:'1. Продолжить плановый цикл мониторинга.\n2. Дежурному офицеру подтвердить статус на утреннем брифинге.'};
   }
 
+  function mdToHtml(text){
+    const esc=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    const lines=text.split('\n');
+    let html='', inList=false, inTable=false;
+    for(let i=0;i<lines.length;i++){
+      let l=lines[i];
+      // Table row
+      if(/^\|.+\|/.test(l)){
+        if(!inTable){ html+='<table style="border-collapse:collapse;width:100%;font-size:12px;margin:6px 0">'; inTable=true; }
+        const isHeader=lines[i+1]&&/^\|[-| ]+\|/.test(lines[i+1]);
+        const isSep=/^\|[-| ]+\|/.test(l);
+        if(isSep) continue;
+        const cells=l.split('|').filter((_,j,a)=>j>0&&j<a.length-1);
+        const tag=isHeader?'th':'td';
+        const style=isHeader?'background:#f1f5f9;font-weight:600;':'';
+        html+=`<tr>${cells.map(c=>`<${tag} style="padding:4px 8px;border:1px solid #e5e7eb;${style}">${esc(c.trim())}</${tag}>`).join('')}</tr>`;
+        continue;
+      }
+      if(inTable){ html+='</table>'; inTable=false; }
+      // Horizontal rule
+      if(/^---+$/.test(l.trim())){
+        if(inList){ html+='</ul>'; inList=false; }
+        html+='<hr style="border:none;border-top:1px solid #e5e7eb;margin:8px 0">';
+        continue;
+      }
+      // Heading ## or ###
+      if(/^#{1,3}\s/.test(l)){
+        if(inList){ html+='</ul>'; inList=false; }
+        const t=esc(l.replace(/^#+\s/,''));
+        html+=`<div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;margin:8px 0 4px">${t}</div>`;
+        continue;
+      }
+      // List item
+      if(/^[-*]\s/.test(l)){
+        if(!inList){ html+='<ul style="margin:4px 0 4px 16px;padding:0">'; inList=true; }
+        const t=l.replace(/^[-*]\s/,'').replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>');
+        html+=`<li style="margin-bottom:3px">${esc(t).replace(/&lt;strong&gt;/g,'<strong>').replace(/&lt;\/strong&gt;/g,'</strong>')}</li>`;
+        continue;
+      }
+      if(inList){ html+='</ul>'; inList=false; }
+      // Empty line
+      if(!l.trim()){ continue; }
+      // Normal paragraph — apply inline bold
+      const p=esc(l).replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>');
+      html+=`<div style="margin-bottom:6px">${p}</div>`;
+    }
+    if(inList) html+='</ul>';
+    if(inTable) html+='</table>';
+    return html;
+  }
+
   function sendChat(){
     const inp=document.getElementById('chat-input'), msgs=document.getElementById('chat-msgs');
     if(!inp||!msgs) return;
@@ -256,7 +307,7 @@ const App = (() => {
     fetch('http://localhost:5000/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({district:_district,message:txt}),signal:AbortSignal.timeout(30000)})
       .then(r=>r.json()).then(d=>{
         const el=document.getElementById('typing');
-        if(el) el.outerHTML=`<div class="msg-ai">${d.response||'Нет ответа от ИИ.'}</div>`;
+        if(el) el.outerHTML=`<div class="msg-ai">${mdToHtml(d.response||'Нет ответа от ИИ.')}</div>`;
         msgs.scrollTop=msgs.scrollHeight;
       }).catch(()=>{
         const el=document.getElementById('typing');

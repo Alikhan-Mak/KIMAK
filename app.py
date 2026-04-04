@@ -121,9 +121,17 @@ def chat():
     if not claude:
         return jsonify({"success": False, "error": "ANTHROPIC_API_KEY not set"}), 503
     try:
+        chat_system = (
+            "You are a city operations AI assistant for Smart City Almaty. "
+            "Respond in clean structured text. Use short paragraphs. "
+            "Use bullet points for lists. Use bold for important terms. "
+            "Keep responses under 250 words. Be direct and specific — name actual streets, "
+            "numbers, and responsible departments. No emojis. "
+            f"You are analyzing the {district} district of Almaty."
+        )
         r = claude.messages.create(
             model=MODEL, max_tokens=512,
-            system=f"{SYSTEM}\n\nContext: Analyzing {district} district.",
+            system=chat_system,
             messages=history + [{"role": "user", "content": message}]
         )
         return jsonify({"success": True, "response": r.content[0].text})
