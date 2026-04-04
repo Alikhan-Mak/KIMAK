@@ -93,13 +93,6 @@ const App = (() => {
     {t:'Mar 30, 11:00',p:'P3',l:'Наурызбайский',m:'Water pressure low — microdistrict 7',s:'resolved'},
   ];
 
-  const CANNED = [
-    'Based on 3-hour trend: situation is deteriorating. Recommend escalating to duty dispatcher if no improvement within 30 min.',
-    'vs last month: 14% increase in incident frequency. 3 of 5 recent alerts were preventable with earlier intervention.',
-    'Neighboring districts not yet affected, but spillover risk is significant if this pattern holds for 2+ more hours.',
-    'Dispatching a second crew reduces mean resolution time from 4h → 2.1h. Cost: ₸180,000. Avoided impact: ₸900,000.',
-    'Historical pattern: this incident type recurs every 14–18 days here. Permanent fix requires ₸2.4M infrastructure upgrade.',
-  ];
 
   function gen24(base, noise, trend, min=0, max=Infinity) {
     return Array.from({length:24},(_,i) => +Math.max(min,Math.min(max,+(base+trend*(i/23)*10+(Math.random()-.5)*noise))).toFixed(1));
@@ -119,17 +112,10 @@ const App = (() => {
 
   // ── STATE ────────────────────────────────────────────────────────────────
   let _map=null, _polys={}, _layer='energy', _district=null, _selected=null;
-  let _charts={}, _timer=null, _chatIdx=0, _digestOpen=true;
+  let _charts={}, _timer=null, _digestOpen=true;
   let _domainDistrict="all", _currentDomain=null;
 
   // ── COLOR UTILS ──────────────────────────────────────────────────────────
-  function lerp(a,b,t){
-    const ah=parseInt(a.slice(1),16), bh=parseInt(b.slice(1),16);
-    const r=Math.round(((ah>>16)&0xff)+(((bh>>16)&0xff)-((ah>>16)&0xff))*t);
-    const g=Math.round(((ah>>8)&0xff)+(((bh>>8)&0xff)-((ah>>8)&0xff))*t);
-    const bl=Math.round((ah&0xff)+((bh&0xff)-(ah&0xff))*t);
-    return '#'+((1<<24)|(r<<16)|(g<<8)|bl).toString(16).slice(1);
-  }
   function metricColor(val, key) {
     const d=D[key]; if(!d) return '#22c55e';
     const ok = d.inverse ? val>=d.warn : val<=d.warn;
@@ -194,7 +180,7 @@ const App = (() => {
 
   // ── DISTRICT PANEL ───────────────────────────────────────────────────────
   function openDistrict(name){
-    _district=name; _chatIdx=0;
+    _district=name;
     document.getElementById('district-panel').classList.add('open');
     const units={energy:'%',utilities:' bar',transport:'/10',urban:' AQI',tourism:'%'};
     const labels={energy:'Энергетика',utilities:'Коммуналка',transport:'Транспорт',urban:'Гор. среда',tourism:'Туризм'};
@@ -267,16 +253,15 @@ const App = (() => {
     msgs.innerHTML+=`<div class="msg-user">${txt}</div>`;
     msgs.innerHTML+=`<div class="msg-ai" id="typing"><span class="ai-dot"></span><span class="ai-dot"></span><span class="ai-dot"></span></div>`;
     msgs.scrollTop=msgs.scrollHeight;
-    // Try real API first
-    fetch('http://localhost:5000/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({district:_district,message:txt}),signal:AbortSignal.timeout(5000)})
+    fetch('http://localhost:5000/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({district:_district,message:txt}),signal:AbortSignal.timeout(30000)})
       .then(r=>r.json()).then(d=>{
-        const el=document.getElementById('typing'); if(el) el.outerHTML=`<div class="msg-ai">${d.response||CANNED[_chatIdx++%CANNED.length]}</div>`;
+        const el=document.getElementById('typing');
+        if(el) el.outerHTML=`<div class="msg-ai">${d.response||'Нет ответа от ИИ.'}</div>`;
         msgs.scrollTop=msgs.scrollHeight;
       }).catch(()=>{
-        setTimeout(()=>{
-          const el=document.getElementById('typing'); if(el) el.outerHTML=`<div class="msg-ai">${CANNED[_chatIdx++%CANNED.length]}</div>`;
-          msgs.scrollTop=msgs.scrollHeight;
-        },900);
+        const el=document.getElementById('typing');
+        if(el) el.outerHTML=`<div class="msg-ai">Ошибка соединения с ИИ. Проверьте, что сервер запущен.</div>`;
+        msgs.scrollTop=msgs.scrollHeight;
       });
   }
 

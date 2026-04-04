@@ -35,7 +35,7 @@ Always name responsible parties, locations, and response times. Never vague advi
 Almaty districts: Алатауский, Турксибский, Жетысуский, Алмалинский,
 Бостандыкский, Медеуский, Ауэзовский, Наурызбайский.
 Incident priority: P1=casualties risk, P2=financial loss, P3=services disruption,
-P4=environmental, P5=transport, P6=discomfort. Respond in English."""
+P4=environmental, P5=transport, P6=discomfort. Respond in Russian."""
 
 # File-backed incident store
 INCIDENTS_FILE = os.path.join(os.path.dirname(__file__), "incidents.json")
