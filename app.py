@@ -37,8 +37,21 @@ Almaty districts: Алатауский, Турксибский, Жетысуск
 Incident priority: P1=casualties risk, P2=financial loss, P3=services disruption,
 P4=environmental, P5=transport, P6=discomfort. Respond in English."""
 
-# In-memory incident store
-incidents: list[dict] = []
+# File-backed incident store
+INCIDENTS_FILE = os.path.join(os.path.dirname(__file__), "incidents.json")
+
+def _load_incidents() -> list[dict]:
+    try:
+        with open(INCIDENTS_FILE, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError):
+        return []
+
+def _save_incidents():
+    with open(INCIDENTS_FILE, "w", encoding="utf-8") as f:
+        json.dump(incidents, f, ensure_ascii=False, indent=2)
+
+incidents: list[dict] = _load_incidents()
 
 
 # ════════════════════════════════════════════════════════════
@@ -143,6 +156,7 @@ def delete_incident(incident_id):
     for i, inc in enumerate(incidents):
         if inc.get("id") == incident_id:
             incidents.pop(i)
+            _save_incidents()
             return jsonify({"success": True})
     return jsonify({"success": False, "error": "Not found"}), 404
 
@@ -165,8 +179,8 @@ def static_files(path):
 # ════════════════════════════════════════════════════════════
 
 _MSG_WELCOME = (
-    "Smart City Almaty — Complaint Bot\n\n"
-    "Send me your complaint and city operators will be notified."
+    "Smart City Алматы — Бот жалоб\n\n"
+    "Отправьте вашу жалобу, и городские операторы будут уведомлены."
 )
 
 
@@ -186,10 +200,11 @@ async def bot_message(update: Update, _: ContextTypes.DEFAULT_TYPE):
         "timestamp": datetime.now().isoformat(),
     }
     incidents.append(incident)
+    _save_incidents()
     log.info("Incident #%d from %s: %s", incident["id"], username, text[:80])
 
     await update.message.reply_text(
-        f"Complaint accepted.\nReference: #INC-{incident['id']:04d}"
+        f"Жалоба принята.\nНомер обращения: #INC-{incident['id']:04d}"
     )
 
 

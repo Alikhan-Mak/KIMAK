@@ -37,45 +37,45 @@ const App = (() => {
   };
   const D = {
     energy: {
-      label:'GRID LOAD %', unit:'%', color:'#0ea5e9', warn:60, crit:80,
+      label:'НАГРУЗКА СЕТИ %', unit:'%', color:'#0ea5e9', warn:60, crit:80,
       districts:{ 'Алатауский':{v:62,t:-2}, 'Турксибский':{v:82,t:5}, 'Ауэзовский':{v:89,t:8}, 'Алмалинский':{v:78,t:3}, 'Жетысуский':{v:65,t:-1}, 'Наурызбайский':{v:55,t:1}, 'Бостандыкский':{v:51,t:-3}, 'Медеуский':{v:60,t:0} },
-      kpis:[{l:'City-Wide Load',v:'72%',u:'avg',t:'+3%',d:'up'},{l:'Active Substations',v:'84',u:'of 91',t:'-2',d:'down'},{l:'Peak Demand',v:'2,840',u:'MW',t:'+120',d:'up'},{l:'Outages',v:'3',u:'active',t:'+1',d:'up'}],
+      kpis:[{l:'Нагрузка по городу',v:'72%',u:'ср.',t:'+3%',d:'up'},{l:'Активных подстанций',v:'84',u:'из 91',t:'-2',d:'down'},{l:'Пиковый спрос',v:'2,840',u:'МВт',t:'+120',d:'up'},{l:'Отключения',v:'3',u:'активных',t:'+1',d:'up'}],
       alerts:[{p:'P1',t:'05:47',l:'Ауэзовский',m:'Transformer T-07 thermal overload — 94% load. Cascade failure risk for 48,000 residents.'},{p:'P2',t:'04:12',l:'Турксибский',m:'Substation KZ-14 degraded — backup line B-3 engaged. Repair ETA: 6h.'},{p:'P3',t:'02:55',l:'Алмалинский',m:'District load spike to 78% — commercial night shift demand.'},{p:'P6',t:'01:20',l:'Жетысуский',m:'Street lighting fault — 14 poles offline on Raiymbek Ave.'}],
       sum:'Ауэзовский district is critical at 94% grid load. Transformer T-07 at Seifullin Ave shows thermal stress (87°C vs 85°C limit), powering 48,000 residents and 320 facilities. Any additional 3% load triggers automatic blackout.',
       crit:'P1 🔴 — Potential mass outage. Hospital backup power at risk. Transformer replacement cost: ₸85M+.',
       act:`1. Emergency crew to T-07, Seifullin Ave 41 — ETA 12 min (Engineer M. Seitkali).\n2. Activate load shedding LX-3: cut commercial load 12% via smart meters.\n3. Reroute 8% load to Алатауский interconnect (340 MW available).\n4. SMS alert to residents: possible 30-min outage 07:00–07:30.\n5. Notify KazEnergo control room.`,
     },
     utilities: {
-      label:'WATER PRESSURE bar', unit:'bar', color:'#22c55e', warn:3.0, crit:2.0, inverse:true,
+      label:'ДАВЛЕНИЕ ВОДЫ бар', unit:'bar', color:'#22c55e', warn:3.0, crit:2.0, inverse:true,
       districts:{ 'Алатауский':{v:4.8,t:0}, 'Турксибский':{v:3.8,t:-0.4}, 'Ауэзовский':{v:4.2,t:0.1}, 'Алмалинский':{v:3.3,t:-1.8}, 'Жетысуский':{v:3.2,t:-0.6}, 'Наурызбайский':{v:4.5,t:0}, 'Бостандыкский':{v:4.9,t:0.2}, 'Медеуский':{v:5.1,t:0.1} },
-      kpis:[{l:'Avg Water Pressure',v:'4.1',u:'bar',t:'-0.3',d:'up'},{l:'Heat Supply Temp',v:'84°C',u:'avg',t:'-2°',d:'up'},{l:'Pipe Faults',v:'7',u:'today',t:'+3',d:'up'},{l:'Complaints',v:'143',u:'24h',t:'+41',d:'up'}],
+      kpis:[{l:'Ср. давление воды',v:'4.1',u:'бар',t:'-0.3',d:'up'},{l:'Темп. теплоснабжения',v:'84°C',u:'ср.',t:'-2°',d:'up'},{l:'Аварии труб',v:'7',u:'сегодня',t:'+3',d:'up'},{l:'Жалобы',v:'143',u:'за 24ч',t:'+41',d:'up'}],
       alerts:[{p:'P3',t:'06:10',l:'Алмалинский',m:'Pressure 2.1 bar — pipe rupture at junction Н-114. 12,400 apartments affected.'},{p:'P3',t:'05:02',l:'Жетысуский',m:'Pressure 3.2 bar — possible leak on Ryskulov Ave. Crew en route.'},{p:'P2',t:'03:30',l:'Турксибский',m:'Boiler station BS-4 offline — 6,200 households without heat.'},{p:'P6',t:'01:15',l:'Наурызбайский',m:'Low pressure complaints from Samal-3. Review at 09:00.'}],
       sum:'Алмалинский critical: pressure fell 4.0→2.1 bar in 90 min. Pipe rupture at junction Н-114 near Abai Ave. 12,400 apartments and 3 hospitals affected. Soil ingress may compromise water quality.',
       crit:'P3 🟡 — Mass disruption. Hospitals need min 3.5 bar for surgical operations.',
       act:`1. Pipe crew to Н-114, Abai/Furmanov crossing — ETA 20 min (Brigade 7, A. Nurmagambetov).\n2. Close valves V-44 and V-45 to isolate rupture.\n3. Notify 3 hospitals to activate backup water reserves NOW.\n4. Almaty app alert: "Pressure reduced, restoration in ~4h."\n5. Deploy 2 mobile water tankers to Abai/Dostyk corridor.`,
     },
     transport: {
-      label:'TRAFFIC INDEX 0–10', unit:'', color:'#a78bfa', warn:5, crit:7.5,
+      label:'ИНДЕКС ТРАФИКА 0–10', unit:'', color:'#a78bfa', warn:5, crit:7.5,
       districts:{ 'Алатауский':{v:2.8,t:-0.2}, 'Турксибский':{v:5.4,t:0.8}, 'Ауэзовский':{v:6.2,t:1.1}, 'Алмалинский':{v:8.4,t:2.0}, 'Жетысуский':{v:5.9,t:0.5}, 'Наурызбайский':{v:3.1,t:0.3}, 'Бостандыкский':{v:4.5,t:0.7}, 'Медеуский':{v:3.9,t:0.4} },
-      kpis:[{l:'City Index',v:'5.1',u:'/10',t:'+0.8',d:'up'},{l:'Avg Speed',v:'24',u:'km/h',t:'-6',d:'up'},{l:'Incidents',v:'5',u:'active',t:'+2',d:'up'},{l:'Road Works',v:'8',u:'zones',t:'0',d:'flat'}],
+      kpis:[{l:'Индекс по городу',v:'5.1',u:'/10',t:'+0.8',d:'up'},{l:'Ср. скорость',v:'24',u:'км/ч',t:'-6',d:'up'},{l:'Инциденты',v:'5',u:'активных',t:'+2',d:'up'},{l:'Дорожные работы',v:'8',u:'зон',t:'0',d:'flat'}],
       alerts:[{p:'P5',t:'07:15',l:'Алмалинский',m:'Index 8.4 — Abai Ave congested Furmanov→Dostyk (3.2km), avg 7 km/h.'},{p:'P5',t:'06:50',l:'Ауэзовский',m:'Accident on Seifullin Ave — 2 lanes blocked, 1.8km backup.'},{p:'P5',t:'05:30',l:'Турксибский',m:'Road works Ryskulov Ave km 4–7 — 40 min delay on Bus 68.'},{p:'P6',t:'04:00',l:'Жетысуский',m:'Bus #54: 2 vehicles out of service, headway increased to 18 min.'}],
       sum:'Алмалинский at traffic index 8.4/10 — worst in city. Abai Ave fully jammed 3.2km. Utility vehicle blocking right lane near Hotel Kazakhstan worsens situation. ~95,000 daily commuters affected.',
       crit:'P5 🔵 — Major commute disruption. Emergency vehicle ETA to central hospitals +8–12 min.',
       act:`1. Activate signal plan TP-2 on Abai Ave — extend green phases on cross-streets.\n2. Deploy 3 traffic controllers to Abai/Furmanov, Abai/Baitursynov, Abai/Dostyk (10 min).\n3. Reroute Bus 21, 39, 64 via Satpaev Ave — push via Almaty Transit app.\n4. Order utility vehicle to clear right lane within 15 min or tow.\n5. Post on @AlmatyTraffic Telegram channel.`,
     },
     urban: {
-      label:'AIR QUALITY AQI', unit:'AQI', color:'#34d399', warn:75, crit:120,
+      label:'КАЧЕСТВО ВОЗДУХА AQI', unit:'AQI', color:'#34d399', warn:75, crit:120,
       districts:{ 'Алатауский':{v:42,t:-3}, 'Турксибский':{v:178,t:22}, 'Ауэзовский':{v:135,t:14}, 'Алмалинский':{v:88,t:8}, 'Жетысуский':{v:71,t:4}, 'Наурызбайский':{v:52,t:2}, 'Бостандыкский':{v:38,t:-5}, 'Медеуский':{v:29,t:-2} },
-      kpis:[{l:'City Avg AQI',v:'79',u:'',t:'+11',d:'up'},{l:'Noise Level',v:'68',u:'dB avg',t:'+3',d:'up'},{l:'Green Coverage',v:'18%',u:'',t:'0%',d:'flat'},{l:'Waste On-Time',v:'91%',u:'',t:'-4%',d:'up'}],
+      kpis:[{l:'Ср. AQI по городу',v:'79',u:'',t:'+11',d:'up'},{l:'Уровень шума',v:'68',u:'дБ ср.',t:'+3',d:'up'},{l:'Озеленение',v:'18%',u:'',t:'0%',d:'flat'},{l:'Вывоз мусора',v:'91%',u:'',t:'-4%',d:'up'}],
       alerts:[{p:'P4',t:'06:00',l:'Турксибский',m:'AQI 178 — PM2.5 at 68 μg/m³. Factory cluster KR-2 and KR-5 emissions.'},{p:'P4',t:'05:10',l:'Ауэзовский',m:'AQI 135 — NO₂ elevated 2.4× WHO limit. School alert recommended.'},{p:'P4',t:'04:45',l:'Алмалинский',m:'AQI 88 — CO rising from vehicle congestion. Monitoring continues.'},{p:'P6',t:'00:30',l:'Жетысуский',m:'14 noise complaints — construction working past 23:00.'}],
       sum:'Турксибский AQI 178 (Unhealthy). PM2.5 at 68 μg/m³ — 5× WHO 24h guideline. Source: factory cluster KR-2 & KR-5. Westerly winds at 12 km/h spreading pollution toward Алмалинский.',
       crit:'P4 🟢 — Environmental damage and public health risk. 6 schools in affected zone.',
       act:`1. Issue emissions reduction order to KR-2 and KR-5 — cut output 30% for 8h (Environmental Code Art. 211).\n2. Health advisory to 6 schools in Турксибский — cancel outdoor activities.\n3. Increase monitoring frequency from 1h to 15 min.\n4. Deploy mobile AQ unit to Rayimbek Ave (downwind).\n5. If AQI > 200 in next 2h → escalate to P1, initiate full industrial shutdown EP-7.`,
     },
     tourism: {
-      label:'VISITOR DENSITY %', unit:'%', color:'#f97316', warn:60, crit:80,
+      label:'ПЛОТНОСТЬ ТУРИСТОВ %', unit:'%', color:'#f97316', warn:60, crit:80,
       districts:{ 'Алатауский':{v:12,t:2}, 'Турксибский':{v:28,t:5}, 'Ауэзовский':{v:35,t:8}, 'Алмалинский':{v:78,t:12}, 'Жетысуский':{v:45,t:6}, 'Наурызбайский':{v:18,t:3}, 'Бостандыкский':{v:55,t:10}, 'Медеуский':{v:88,t:18} },
-      kpis:[{l:'Total Visitors',v:'84,200',u:'today',t:'+12,400',d:'up'},{l:'Visitors Today',v:'84,200',u:'today',t:'+12,400',d:'up'},{l:'Avg Sentiment',v:'4.1/5',u:'',t:'-0.2',d:'up'},{l:'Economic Impact',v:'₸2.4B',u:'est today',t:'+8%',d:'down'}],
+      kpis:[{l:'Всего туристов',v:'84,200',u:'сегодня',t:'+12,400',d:'up'},{l:'Туристов сегодня',v:'84,200',u:'сегодня',t:'+12,400',d:'up'},{l:'Ср. оценка',v:'4.1/5',u:'',t:'-0.2',d:'up'},{l:'Экономический эффект',v:'₸2.4B',u:'ест. сегодня',t:'+8%',d:'down'}],
       alerts:[{p:'P3',t:'07:00',l:'Медеуский',m:'Shymbulak 95% capacity — 2.1km queue. Safety threshold breach imminent.'},{p:'P3',t:'06:45',l:'Алмалинский',m:'Panfilov Park 78% — exceeded 90% three times in past hour.'},{p:'P5',t:'06:30',l:'Медеуский',m:'340 vehicles in unauthorized parking zones on Medeu approach.'},{p:'P6',t:'05:00',l:'Бостандыкский',m:'Kok-Tobe cable car wait 65 min. Negative reviews spiking.'}],
       sum:'Медеуский critical: Shymbulak at 95% capacity (9,500/10,000). Queue 2.1km. Kok-Tobe (Бостандыкский) at 45% — ideal redirection target, similar mountain appeal. Est. revenue uplift if redirected: +12%.',
       crit:'P3 🟡 — Overcrowding creates safety hazard. Evacuation route capacity exceeded.',
@@ -187,7 +187,7 @@ const App = (() => {
     _layer=key;
     document.querySelectorAll('.lbtn').forEach(b=>b.classList.remove('active'));
     document.getElementById('lb-'+key)?.classList.add('active');
-    const titles={energy:'GRID LOAD %',utilities:'WATER PRESSURE (bar)',transport:'TRAFFIC INDEX (0–10)',urban:'AIR QUALITY AQI',tourism:'VISITOR DENSITY %'};
+    const titles={energy:'НАГРУЗКА СЕТИ %',utilities:'ДАВЛЕНИЕ ВОДЫ (бар)',transport:'ИНДЕКС ТРАФИКА (0–10)',urban:'КАЧЕСТВО ВОЗДУХА AQI',tourism:'ПЛОТНОСТЬ ТУРИСТОВ %'};
     const el=document.getElementById('legend-title'); if(el) el.textContent=titles[key]||key;
     paintAll();
   }
@@ -197,7 +197,7 @@ const App = (() => {
     _district=name; _chatIdx=0;
     document.getElementById('district-panel').classList.add('open');
     const units={energy:'%',utilities:' bar',transport:'/10',urban:' AQI',tourism:'%'};
-    const labels={energy:'Energy',utilities:'Utilities',transport:'Transport',urban:'Urban',tourism:'Tourism'};
+    const labels={energy:'Энергетика',utilities:'Коммуналка',transport:'Транспорт',urban:'Гор. среда',tourism:'Туризм'};
     const metrics = Object.keys(D).map(k=>{
       const dd=D[k].districts[name]; if(!dd) return '';
       const c=metricColor(dd.v,k);
@@ -209,30 +209,30 @@ const App = (() => {
     const ai=getAI(name);
     document.getElementById('dp-content').innerHTML=`
       <div class="dp-header">
-        <div><div class="dp-title">${name}</div><div class="dp-subtitle">Almaty District</div></div>
+        <div><div class="dp-title">${name}</div><div class="dp-subtitle">Район Алматы</div></div>
         <button class="dp-close" onclick="App.closeDistrict()">×</button>
       </div>
       <div class="dp-body">
-        <div class="section-title">DOMAIN METRICS</div>
+        <div class="section-title">ПОКАЗАТЕЛИ</div>
         ${metrics}
         <div style="margin-top:20px">
           <div class="section-title" style="color:#0ea5e9;display:flex;align-items:center;gap:6px">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#0ea5e9" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4m0 4h.01"/></svg>
-            AI ANALYSIS
+            АНАЛИЗ ИИ
           </div>
           <div id="dp-ai-load" class="ai-loading" style="margin-top:8px">
             <span class="ai-dot"></span><span class="ai-dot"></span><span class="ai-dot"></span>
-            <span class="ai-loading-text">Analyzing district data…</span>
+            <span class="ai-loading-text">Анализ данных района…</span>
           </div>
           <div id="dp-ai-res" class="ai-result">
-            <div class="ai-block"><div class="ai-block-title">WHAT IS HAPPENING?</div><div class="ai-block-text">${ai.sit}</div></div>
-            <div class="ai-block"><div class="ai-block-title">HOW CRITICAL?</div><div class="ai-block-text">${ai.crit}</div></div>
-            <div class="ai-actions-block"><div class="ai-actions-title">ACTIONS REQUIRED</div><div class="ai-actions-text">${ai.act}</div></div>
+            <div class="ai-block"><div class="ai-block-title">ЧТО ПРОИСХОДИТ?</div><div class="ai-block-text">${ai.sit}</div></div>
+            <div class="ai-block"><div class="ai-block-title">НАСКОЛЬКО КРИТИЧНО?</div><div class="ai-block-text">${ai.crit}</div></div>
+            <div class="ai-actions-block"><div class="ai-actions-title">НЕОБХОДИМЫЕ ДЕЙСТВИЯ</div><div class="ai-actions-text">${ai.act}</div></div>
             <div class="chat-section">
-              <div class="chat-label">FOLLOW-UP CHAT</div>
+              <div class="chat-label">ЧАТ С ИИ</div>
               <div id="chat-msgs"></div>
               <div class="chat-row">
-                <input class="chat-input" id="chat-input" type="text" placeholder="Ask about this district…" onkeydown="if(event.key==='Enter')App.sendChat()"/>
+                <input class="chat-input" id="chat-input" type="text" placeholder="Задать вопрос о районе…" onkeydown="if(event.key==='Enter')App.sendChat()"/>
                 <button class="chat-send" onclick="App.sendChat()">→</button>
               </div>
             </div>
@@ -381,9 +381,9 @@ const App = (() => {
     const sum=dd?dd.sum:d.sum;
     const crit=dd?dd.crit:d.crit;
     const act=dd?dd.act:d.act;
-    const subtitle=isAll?'Almaty':dist;
-    const names={energy:'Energy',utilities:'Utilities (ЖКХ)',transport:'Transport',urban:'Urban Environment',tourism:'Tourism'};
-    const selOpts=['all',...DIST_LIST].map(v=>`<option value="${v}"${v===dist?' selected':''}>${v==='all'?'All Districts':v}</option>`).join('');
+    const subtitle=isAll?'Алматы':dist;
+    const names={energy:'Энергетика',utilities:'Коммуналка (ЖКХ)',transport:'Транспорт',urban:'Городская среда',tourism:'Туризм'};
+    const selOpts=['all',...DIST_LIST].map(v=>`<option value="${v}"${v===dist?' selected':''}>${v==='all'?'Все районы':v}</option>`).join('');
 
     document.getElementById('domain-content').innerHTML=`
       <div style="max-width:1200px;margin:0 auto;padding-bottom:40px">
@@ -393,16 +393,16 @@ const App = (() => {
               <div class="domain-accent-bar" style="background:${d.color}"></div>
               <h1 class="domain-title">${names[key]} Dashboard</h1>
             </div>
-            <div class="domain-subtitle">Real-time · ${subtitle} · <span class="mono" id="d-time"></span></div>
+            <div class="domain-subtitle">Реальное время · ${subtitle} · <span class="mono" id="d-time"></span></div>
           </div>
           <button class="export-btn" onclick="App.exportPDF('${key}')">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
-            Export PDF
+            Экспорт PDF
           </button>
         </div>
 
         <div style="display:flex;align-items:center;gap:10px;margin:0 0 18px">
-          <span style="font-size:11px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:.05em;flex-shrink:0">District</span>
+          <span style="font-size:11px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:.05em;flex-shrink:0">Район</span>
           <select onchange="App.selectDomainDistrict(this.value)" style="background:var(--surface);color:var(--text);border:1px solid var(--border);border-radius:6px;padding:6px 10px;font-size:13px;font-family:inherit;cursor:pointer;outline:none">${selOpts}</select>
         </div>
 
@@ -416,13 +416,13 @@ const App = (() => {
 
         <div class="charts-row">
           <div class="chart-card">
-            <div class="chart-header"><span class="chart-label">24-HOUR TREND — ${d.label}</span></div>
+            <div class="chart-header"><span class="chart-label">ТРЕНД ЗА 24 ЧАСА — ${d.label}</span></div>
             <div style="position:relative;height:180px"><canvas id="chart-ts"></canvas></div>
           </div>
           <div class="chart-card">
             <div class="chart-header">
-              <span class="chart-label">6-HOUR FORECAST</span>
-              <span class="forecast-badge">AI PREDICTED</span>
+              <span class="chart-label">ПРОГНОЗ НА 6 ЧАСОВ</span>
+              <span class="forecast-badge">ПРОГНОЗ ИИ</span>
             </div>
             <div style="position:relative;height:180px"><canvas id="chart-fc"></canvas></div>
           </div>
@@ -430,25 +430,25 @@ const App = (() => {
 
         <div class="bottom-row">
           <div class="panel-card">
-            <div class="panel-label">ANOMALIES &amp; ALERTS</div>
+            <div class="panel-label">АНОМАЛИИ И ПРЕДУПРЕЖДЕНИЯ</div>
             ${visAlerts.length?visAlerts.map(a=>`
               <div class="alert-row">
                 <span class="badge bp${a.p.toLowerCase()}">${a.p}</span>
                 <div><div class="alert-loc">${a.l} <span class="alert-time-text">· ${a.t}</span></div>
                 <div class="alert-msg">${a.m}</div></div>
-              </div>`).join(''):'<div style="color:var(--text-2);font-size:13px;padding:12px 0">No alerts for this district.</div>'}
+              </div>`).join(''):'<div style="color:var(--text-2);font-size:13px;padding:12px 0">Нет предупреждений для этого района.</div>'}
           </div>
           <div class="panel-card">
-            <div class="panel-label">AI DOMAIN ANALYSIS</div>
+            <div class="panel-label">АНАЛИЗ ИИ</div>
             <div id="d-ai-load" class="ai-loading">
               <span class="ai-dot"></span><span class="ai-dot"></span><span class="ai-dot"></span>
-              <span class="ai-loading-text">Generating analysis…</span>
+              <span class="ai-loading-text">Генерация анализа…</span>
             </div>
             <div id="d-ai-res" class="ai-result">
-              <div class="ai-block"><div class="ai-block-title">SITUATION SUMMARY</div><div class="ai-block-text">${sum}</div></div>
-              <div class="ai-block"><div class="ai-block-title">CRITICALITY</div><div class="ai-block-text">${crit}</div></div>
+              <div class="ai-block"><div class="ai-block-title">СВОДКА СИТУАЦИИ</div><div class="ai-block-text">${sum}</div></div>
+              <div class="ai-block"><div class="ai-block-title">КРИТИЧНОСТЬ</div><div class="ai-block-text">${crit}</div></div>
               <div class="ai-actions-block" style="border-left:3px solid ${d.color}">
-                <div class="ai-actions-title">RECOMMENDED ACTIONS</div>
+                <div class="ai-actions-title">РЕКОМЕНДУЕМЫЕ ДЕЙСТВИЯ</div>
                 <div class="ai-actions-text">${act}</div>
               </div>
             </div>
@@ -456,7 +456,7 @@ const App = (() => {
         </div>
 
         <div class="history-card">
-          <div class="panel-label">ANOMALY HISTORY LOG</div>
+          <div class="panel-label">ЖУРНАЛ АНОМАЛИЙ</div>
           <div class="history-scroll">${(isAll?HISTORY:HISTORY.filter(h=>h.l===dist)).map(h=>`
             <div class="history-row">
               <span class="h-time">${h.t}</span>
@@ -464,7 +464,7 @@ const App = (() => {
               <span class="h-loc">${h.l}</span>
               <span class="h-msg">${h.m}</span>
               <span class="s-tag s-${h.s}">${h.s}</span>
-            </div>`).join('')||'<div style="color:var(--text-2);font-size:13px;padding:12px 0">No history entries for this district.</div>'}
+            </div>`).join('')||'<div style="color:var(--text-2);font-size:13px;padding:12px 0">Нет записей для этого района.</div>'}
           </div>
         </div>
       </div>`;
@@ -599,27 +599,27 @@ const App = (() => {
           <div>
             <div class="domain-title-row">
               <div class="domain-accent-bar" style="background:#f97316"></div>
-              <h1 class="domain-title">Citizen Complaints</h1>
+              <h1 class="domain-title">Жалобы граждан</h1>
             </div>
             <div class="domain-subtitle">
-              Telegram Bot · ${isMock?'<span style="color:#f59e0b">Demo data</span>':'<span style="color:#22c55e">Live</span>'}
-              · Updated ${updatedAt}
+              Telegram Bot · ${isMock?'<span style="color:#f59e0b">Демо-данные</span>':'<span style="color:#22c55e">В эфире</span>'}
+              · Обновлено ${updatedAt}
             </div>
           </div>
           <button class="export-btn" onclick="App.refreshComplaints()" style="cursor:pointer">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg>
-            Refresh
+            Обновить
           </button>
         </div>
 
         <div class="kpi-row" style="margin-bottom:20px">
-          ${[['P1','#fef2f2','#b91c1c','Potential human casualties'],['P2','#fff7ed','#c2410c','Significant financial loss'],['P3','#fffbeb','#b45309','Mass disruption of essential services'],['P4','#f0fdf4','#15803d','Environmental damage'],['P5','#eff6ff','#1d4ed8','Transport disruption'],['P6','#f8fafc','#475569','Public discomfort']].map(([p,bg,tc,tip])=>`
+          ${[['P1','#fef2f2','#b91c1c','Угроза жизни людей'],['P2','#fff7ed','#c2410c','Значительный ущерб'],['P3','#fffbeb','#b45309','Массовый сбой услуг'],['P4','#f0fdf4','#15803d','Экологический ущерб'],['P5','#eff6ff','#1d4ed8','Сбой транспорта'],['P6','#f8fafc','#475569','Незначительный дискомфорт']].map(([p,bg,tc,tip])=>`
             <div class="kpi-card" style="flex:1;min-width:72px;text-align:center;cursor:default" data-tip="${p} — ${tip}">
               <div style="width:32px;height:32px;border-radius:50%;background:${bg};color:${tc};font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;margin:0 auto 6px">${p}</div>
               <div class="kpi-value" style="color:${tc};font-size:20px">${counts[p]}</div>
             </div>`).join('')}
-          <div class="kpi-card" style="flex:1;min-width:72px;text-align:center;cursor:default" data-tip="ALL — Show all priorities">
-            <div style="width:32px;height:32px;border-radius:50%;background:var(--accent-bg);color:var(--accent);font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;margin:0 auto 6px">ALL</div>
+          <div class="kpi-card" style="flex:1;min-width:72px;text-align:center;cursor:default" data-tip="ВСЕ — Показать все приоритеты">
+            <div style="width:32px;height:32px;border-radius:50%;background:var(--accent-bg);color:var(--accent);font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;margin:0 auto 6px">ВСЕ</div>
             <div class="kpi-value" style="color:var(--accent);font-size:20px">${sorted.length}</div>
           </div>
         </div>
@@ -628,8 +628,8 @@ const App = (() => {
           ${sorted.length===0?`
             <div style="padding:40px;text-align:center;color:#94a3b8">
               <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-bottom:12px;opacity:.4"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
-              <div>No complaints received yet.</div>
-              <div style="font-size:12px;margin-top:4px">Start the Citizen Bot and send /start in Telegram.</div>
+              <div>Жалоб пока нет.</div>
+              <div style="font-size:12px;margin-top:4px">Запустите бота и отправьте /start в Telegram.</div>
             </div>` :
           sorted.map(c=>{
             const pn=parseInt((c.priority||'P6')[1])||6;
@@ -648,14 +648,14 @@ const App = (() => {
               </div>
               <div class="complaint-body">
                 <div class="complaint-meta">
-                  <span class="complaint-district">${c.district||'Unknown'}</span>
-                  <span class="complaint-cat">${c.category||'other'}</span>
+                  <span class="complaint-district">${c.district||'Неизвестно'}</span>
+                  <span class="complaint-cat">${c.category||'другое'}</span>
                   <span class="complaint-time">${dt}</span>
                   ${c.username?`<span class="complaint-user">@${c.username}</span>`:''}
                 </div>
                 <div class="complaint-text">${c.text||c.summary||'—'}</div>
               </div>
-              <button onclick="App.deleteComplaint(${c.id})" style="margin-left:16px;padding:6px 14px;border:1px solid #d1d5db;border-radius:6px;background:#fff;color:#374151;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;flex-shrink:0">Done</button>
+              <button onclick="App.deleteComplaint(${c.id})" style="margin-left:16px;padding:6px 14px;border:1px solid #d1d5db;border-radius:6px;background:#fff;color:#374151;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;flex-shrink:0">Готово</button>
             </div>`; }).join('')}
         </div>
       </div>`;

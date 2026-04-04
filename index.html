@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-  <title>Smart City Almaty — Dashboard</title>
+  <title>Smart City Алматы — Панель управления</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="style.css"/>
@@ -15,21 +15,21 @@
   <div class="nav-brand">
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="brand-icon"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>
     <span class="brand-name">Smart City</span>
-    <span class="brand-city">Almaty</span>
+    <span class="brand-city">Алматы</span>
   </div>
   <div class="nav-divider"></div>
   <nav class="nav-links">
-    <button class="nav-btn active" id="nav-map"       onclick="App.navigate('map')">Map</button>
-    <button class="nav-btn"        id="nav-energy"    onclick="App.navigate('energy')">Energy</button>
-    <button class="nav-btn"        id="nav-utilities" onclick="App.navigate('utilities')">Utilities</button>
-    <button class="nav-btn"        id="nav-transport" onclick="App.navigate('transport')">Transport</button>
-    <button class="nav-btn"        id="nav-urban"     onclick="App.navigate('urban')">Urban Env</button>
-    <button class="nav-btn"        id="nav-tourism"   onclick="App.navigate('tourism')">Tourism</button>
-    <button class="nav-btn"        id="nav-complaints" onclick="App.navigate('complaints')">Complaints</button>
+    <button class="nav-btn active" id="nav-map"       onclick="App.navigate('map')">Карта</button>
+    <button class="nav-btn"        id="nav-energy"    onclick="App.navigate('energy')">Энергетика</button>
+    <button class="nav-btn"        id="nav-utilities" onclick="App.navigate('utilities')">Коммуналка</button>
+    <button class="nav-btn"        id="nav-transport" onclick="App.navigate('transport')">Транспорт</button>
+    <button class="nav-btn"        id="nav-urban"     onclick="App.navigate('urban')">Гор. среда</button>
+    <button class="nav-btn"        id="nav-tourism"   onclick="App.navigate('tourism')">Туризм</button>
+    <button class="nav-btn"        id="nav-complaints" onclick="App.navigate('complaints')">Жалобы</button>
   </nav>
   <div class="nav-status">
     <span id="clock" class="clock"></span>
-    <span class="live-badge"><span class="live-dot"></span>LIVE</span>
+    <span class="live-badge"><span class="live-dot"></span>В ЭФИРЕ</span>
   </div>
 </header>
 
@@ -40,26 +40,26 @@
   <div id="digest-bar">
     <div class="digest-header" onclick="App.toggleDigest()">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0ea5e9" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4m0 4h.01"/></svg>
-      <span class="digest-title">Daily Digest</span>
-      <span class="digest-subtitle">AI City Summary — 06:00 Apr 3</span>
+      <span class="digest-title">Дневной дайджест</span>
+      <span class="digest-subtitle">Сводка ИИ — 06:00, 3 апр</span>
       <svg id="digest-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2" class="digest-chevron"><path d="M6 9l6 6 6-6"/></svg>
     </div>
     <div id="digest-body" class="digest-body">
       <div class="digest-cards">
         <div class="digest-card digest-p1">
-          <div class="digest-badge">P1 CRITICAL</div>
-          <div class="digest-card-title">Grid Overload — Ауэзовский</div>
-          <div class="digest-card-text">Power grid at 94% capacity. Transformer T-07 showing thermal stress. Risk of cascade failure affecting 48,000 residents.</div>
+          <div class="digest-badge">P1 КРИТИЧЕСКИЙ</div>
+          <div class="digest-card-title">Перегрузка сети — Ауэзовский</div>
+          <div class="digest-card-text">Нагрузка на сеть 94%. Трансформатор Т-07 в зоне теплового стресса. Риск каскадного отключения для 48 000 жителей.</div>
         </div>
         <div class="digest-card digest-p3">
-          <div class="digest-badge digest-badge-warn">P3 DISRUPTION</div>
-          <div class="digest-card-title">Water Pressure Drop — Алмалинский</div>
-          <div class="digest-card-text">Central pipe network pressure fallen to 2.1 bar (normal 4–6). 12,400 apartments affected. Maintenance crew dispatched.</div>
+          <div class="digest-badge digest-badge-warn">P3 СБОЙ</div>
+          <div class="digest-card-title">Падение давления воды — Алмалинский</div>
+          <div class="digest-card-text">Давление в центральной сети упало до 2,1 бар (норма 4–6). Затронуто 12 400 квартир. Бригада выслана.</div>
         </div>
         <div class="digest-card digest-p2">
-          <div class="digest-badge digest-badge-orange">P2 FINANCIAL</div>
-          <div class="digest-card-title">Air Quality Breach — Турксибский</div>
-          <div class="digest-card-text">AQI reached 178 (Unhealthy). Industrial emissions from factory cluster. Fines applicable. Health advisory issued.</div>
+          <div class="digest-badge digest-badge-orange">P2 ФИНАНСОВЫЙ</div>
+          <div class="digest-card-title">Нарушение качества воздуха — Турксибский</div>
+          <div class="digest-card-text">AQI достиг 178 (вредный). Промышленные выбросы завода. Возможны штрафы. Выпущено предупреждение для здоровья.</div>
         </div>
       </div>
     </div>
@@ -71,20 +71,20 @@
 
     <!-- Layer Switcher -->
     <div id="layer-switcher">
-      <div class="layer-label">LAYER</div>
-      <button class="lbtn active" id="lb-energy"    onclick="App.setLayer('energy')">Energy</button>
-      <button class="lbtn"        id="lb-utilities" onclick="App.setLayer('utilities')">Utilities</button>
-      <button class="lbtn"        id="lb-transport" onclick="App.setLayer('transport')">Transport</button>
-      <button class="lbtn"        id="lb-urban"     onclick="App.setLayer('urban')">Urban Env</button>
-      <button class="lbtn"        id="lb-tourism"   onclick="App.setLayer('tourism')">Tourism</button>
+      <div class="layer-label">СЛОЙ</div>
+      <button class="lbtn active" id="lb-energy"    onclick="App.setLayer('energy')">Энергетика</button>
+      <button class="lbtn"        id="lb-utilities" onclick="App.setLayer('utilities')">Коммуналка</button>
+      <button class="lbtn"        id="lb-transport" onclick="App.setLayer('transport')">Транспорт</button>
+      <button class="lbtn"        id="lb-urban"     onclick="App.setLayer('urban')">Гор. среда</button>
+      <button class="lbtn"        id="lb-tourism"   onclick="App.setLayer('tourism')">Туризм</button>
     </div>
 
     <!-- Map Legend -->
     <div id="map-legend">
-      <div class="legend-title" id="legend-title">GRID LOAD %</div>
+      <div class="legend-title" id="legend-title">НАГРУЗКА СЕТИ %</div>
       <div class="grad-bar"></div>
       <div class="legend-labels">
-        <span>Normal</span><span>Warning</span><span>Critical</span>
+        <span>Норма</span><span>Внимание</span><span>Критично</span>
       </div>
     </div>
 
